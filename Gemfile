@@ -57,3 +57,5 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'bcrypt'
+gem 'jwt', '~> 2.1'
+gem 'pundit', '~> 1.1'

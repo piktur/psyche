@@ -15,7 +15,13 @@
     "react-app"
   ],
   "plugins": [
-    "relay",
+    [
+      "relay",
+      {
+        "schema": "app/javascript/packs/schema.json",
+        "debug": true
+      }
+    ],
     "syntax-dynamic-import",
     "transform-object-rest-spread",
     [

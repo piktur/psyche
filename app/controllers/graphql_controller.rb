@@ -2,7 +2,7 @@
 
 class GraphqlController < ApplicationController
 
-  def execute
+  def execute # rubocop:disable MethodLength
     variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
@@ -10,7 +10,12 @@ class GraphqlController < ApplicationController
       # Query context goes here, for example:
       # current_user: current_user,
     }
-    result = PsycheSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+    result = ::PsycheSchema.execute(
+      query,
+      variables:      variables,
+      context:        context,
+      operation_name: operation_name
+    )
     render json: result
   rescue StandardError => e
     raise e unless Rails.env.development?
@@ -19,8 +24,8 @@ class GraphqlController < ApplicationController
 
   private
 
-  # Handle form data, JSON body, or a blank value
-    def ensure_hash(ambiguous_param)
+    # Handle form data, JSON body, or a blank value
+    def ensure_hash(ambiguous_param) # rubocop:disable MethodLength
       case ambiguous_param
       when String
         if ambiguous_param.present?
@@ -41,7 +46,13 @@ class GraphqlController < ApplicationController
       logger.error e.message
       logger.error e.backtrace.join("\n")
 
-      render json: { error: { message: e.message, backtrace: e.backtrace }, data: {} }, status: :internal_server_error
+      render(
+        json:   {
+          error: { message: e.message, backtrace: e.backtrace },
+          data:  {}
+        },
+        status: :internal_server_error
+      )
     end
 
 end

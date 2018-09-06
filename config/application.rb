@@ -32,6 +32,10 @@ module Psyche
     # Don't generate system test files.
     config.generators.system_tests = nil
 
+    rake_tasks do
+      ::Dir['lib/tasks/**/*.rake'].each { |f| load f }
+    end
+
   end
 
 end

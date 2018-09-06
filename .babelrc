@@ -17,7 +17,7 @@
     [
       "relay",
       {
-        "schema": "app/javascript/packs/schema.json",
+        "schema": "app/javascript/packs/schema.grapqhl",
         "debug": true
       }
     ],

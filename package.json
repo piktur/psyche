@@ -1,6 +1,9 @@
 {
   "name": "psyche",
   "private": true,
+  "scripts": {
+    "relay": "relay-compiler --src ./app/javascript --schema ./app/javascript/packs/schema.json"
+  },
   "dependencies": {
     "@rails/webpacker": "3.5",
     "babel-preset-react": "^6.24.1",

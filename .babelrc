@@ -11,9 +11,11 @@
         "useBuiltIns": true
       }
     ],
-    "react"
+    "react",
+    "react-app"
   ],
   "plugins": [
+    "relay",
     "syntax-dynamic-import",
     "transform-object-rest-spread",
     [

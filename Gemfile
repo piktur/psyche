@@ -21,6 +21,7 @@ gem 'webpacker'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 gem 'react-rails'
+gem 'graphql'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'

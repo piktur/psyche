@@ -1,0 +1,298 @@
+AllCops:
+  Exclude:
+    - 'vendor/**/*'
+    - 'app/javascript/**/*'
+    - 'node_modules/**/*'
+  DisplayCopNames: true
+  TargetRubyVersion: 2.5.1
+  TargetRailsVersion: 5.0
+
+Style/BracesAroundHashParameters:
+  EnforcedStyle: context_dependent
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: nested # compact
+
+Style/Documentation:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*'
+    - 'db/**/*'
+
+Style/Copyright:
+  Enabled: false
+
+Style/CommentAnnotation:
+  Keywords:
+    - '@abstract'
+    - '@api'
+    - '@attr'
+    - '@attr_reader'
+    - '@attr_writer'
+    - '@author'
+    - '@deprecated'
+    - '@example'
+    - '@note'
+    - '@option'
+    - '@overload'
+    - '@param'
+    - '@private'
+    - '@raise'
+    - '@return'
+    - '@see'
+    - '@since'
+    - '@todo'
+    - '@version'
+    - '@yield'
+    - '@yieldparam'
+    - '@yieldreturn'
+    - '@!attribute'
+    - '@!endgroup'
+    - '@!group'
+    - '@!macro'
+    - '@!method'
+    - '@!parse'
+    - '@!scope'
+    - '@!visibility'
+
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: when_needed
+
+Style/FormatStringToken:
+  EnforcedStyle: template
+
+Naming/UncommunicativeMethodParamName:
+  MinNameLength: 2
+  AllowNamesEndingInNumbers: true
+  AllowedNames:
+    - io
+    - id
+    - to
+    - by
+    - 'on'
+    - in
+    - at
+    - pp
+    - 'n'
+    - i
+
+Naming/FileName:
+  ExpectMatchingDefinition: false
+
+Naming/MemoizedInstanceVariableName:
+  EnforcedStyleForLeadingUnderscores: optional
+
+Style/AccessModifierDeclarations:
+  Enabled: false
+
+Layout/EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true
+
+Layout/EmptyLinesAroundClassBody:
+  EnforcedStyle: empty_lines
+
+Layout/EmptyLinesAroundModuleBody:
+  EnforcedStyle: empty_lines
+
+Layout/AlignHash:
+  EnforcedHashRocketStyle: key
+  EnforcedColonStyle: table
+  Exclude:
+    - 'locales/**/*'
+
+Layout/CommentIndentation:
+  Enabled: false
+
+Layout/CaseIndentation:
+  EnforcedStyle: end
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: start_of_line
+
+Layout/IndentationConsistency:
+  EnforcedStyle: rails
+
+Layout/MultilineHashBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/MultilineMethodCallBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineMethodDefinitionBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Style/Next:
+  EnforcedStyle: skip_modifier_ifs
+
+Style/RegexpLiteral:
+  EnforcedStyle: slashes
+  AllowInnerSlashes: true
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: ()
+    '%i': '()'
+    '%I': '()'
+    '%r': '{}'
+    '%w': '()'
+    '%W': '()'
+
+Naming/PredicateName:
+  Exclude:
+    - 'spec/**/*'
+
+Style/Semicolon:
+  AllowAsExpressionSeparator: true
+
+Style/SingleLineBlockParams:
+  Enabled: true
+  Methods:
+    - reduce:
+        - a
+        - e
+    - inject:
+        - a
+        - e
+
+Style/TrivialAccessors:
+  ExactNameMatch: true
+  AllowPredicates: false
+
+Style/WordArray:
+  EnforcedStyle: percent
+  MinSize: 1
+
+Style/SymbolArray:
+  Enabled: false
+  EnforcedStyle: brackets
+
+Style/PerlBackrefs:
+  Enabled: false
+
+Style/ImplicitRuntimeError:
+  Enabled: true
+
+Style/OptionHash:
+  Enabled: true
+
+Style/ColonMethodCall:
+  Enabled: false
+
+Style/LambdaCall:
+  Enabled: false
+
+Style/SingleLineMethods:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - '*.gemspec'
+  CountComments: false
+  Max: 30
+  ExcludedMethods:
+    - context
+    - describe
+    - it
+    - specify
+    - let
+    - let!
+    - subject
+    - before
+    - around
+    - shared_context
+    - include_contexts
+    - shared_examples
+    - include_examples
+    - configure
+    - included
+    - new
+
+Metrics/BlockNesting:
+  Max: 3
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/ClassLength:
+  CountComments: false
+  Max: 200
+
+Metrics/ModuleLength:
+  CountComments: false
+  Max: 200
+
+Metrics/LineLength:
+  Max: 100
+  AllowHeredoc: true
+  AllowURI: true
+  URISchemes:
+    - http
+    - https
+  IgnoreCopDirectives: true
+  IgnoredPatterns:
+    - !ruby/regexp /\A\s*#\s*@[!a-z]/
+  Exclude:
+    - 'locales/**/*'
+
+Metrics/MethodLength:
+  CountComments: false
+  Max: 10
+  Exclude:
+    - 'db/migrate/**/*'
+
+Metrics/ParameterLists:
+  Max: 5
+  CountKeywordArgs: false
+
+Lint/MissingCopEnableDirective:
+  Enabled: false
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Lint/UnusedBlockArgument:
+  IgnoreEmptyBlocks: true
+  AllowUnusedKeywordArguments: true
+
+Lint/UnusedMethodArgument:
+  AllowUnusedKeywordArguments: true
+  IgnoreEmptyMethods: true
+
+Lint/InheritException:
+  EnforcedStyle: standard_error
+
+Lint/UnderscorePrefixedVariableName:
+  Enabled: false
+
+Lint/UnneededSplatExpansion:
+  Enabled: false
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Rails:
+  Enabled: true
+
+Rails/Delegate:
+  Enabled: false
+
+Rails/Date:
+  EnforcedStyle: flexible
+
+Rails/DynamicFindBy:
+  Whitelist:
+    - find_by_sql
+
+Rails/Exit:
+  Exclude:
+    - 'bin/*'
+    - 'Rakefile'
+
+Rails/SaveBang:
+  Enabled: true

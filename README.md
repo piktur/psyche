@@ -1,24 +1,24 @@
-# README
+# Psyche
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* Ruby on Rails
+* GraphQL
+* Relay
+* React
 
-Things you may want to cover:
+## Development
 
-* Ruby version
+```
+git clone git@githbub.com:piktur/psyche
+cd psyche
 
-* System dependencies
+gem install foreman
+brew install watchman
 
-* Configuration
+bundle install
 
-* Database creation
+foreman start
+```
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+App: [`localhost:3000`](http://localhost:3000/)
+GraphQL server: [`localhost:3000/graphiql`](http://localhost:3000/graphql)
+GraphiQL server: [`localhost:3000/graphiql`](http://localhost:3000/graphiql)

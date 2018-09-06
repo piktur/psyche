@@ -24,3 +24,6 @@ yarn-debug.log*
 .yarn-integrity
 
 __generated__/
+TODO.md
+
+.env*

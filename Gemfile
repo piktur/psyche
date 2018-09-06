@@ -21,6 +21,8 @@ gem 'webpacker'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
+gem 'oj'
+
 gem 'react-rails'
 
 gem 'graphql'

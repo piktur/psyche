@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 
-Types::CredentialsType = GraphQL::InputObjectType.define do
-  name 'Credentials'
+module Types
 
-  argument :email, !types.String
-  argument :password, !types.String
+  class CredentialsType < ::GraphQL::Schema::InputObject
+
+    graphql_name 'Credentials'
+
+    argument :email, String, required: true
+    argument :password, String, required: true
+
+  end
+
 end

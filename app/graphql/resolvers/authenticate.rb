@@ -2,25 +2,18 @@
 
 module Resolvers
 
-  class Authenticate < GraphQL::Function
+  class Authenticate < ::GraphQL::Function
 
-    argument :credentials, !Types::CredentialsType
+    argument :credentials, ::Types::CredentialsType
 
-    type do
-      name 'Token'
-
-      field :token, types.String
-      field :type, types.String
-      field :expires_in, types.Int
-      field :expires_at, types.Int
-    end
+    type ::Types::TokenType
 
     def call(_opts, args, _ctx)
       input = args[:credentials]
 
       return if input.nil?
 
-      return unless (user = User.find_by(email: input[:email]))
+      return unless (user = ::User.find_by(email: input[:email]))
 
       generate_token(user.to_jwt_claims) if user.authenticate(input[:password])
     end
@@ -28,7 +21,7 @@ module Resolvers
     private
 
       def generate_token(claims)
-        Psyche['token_issuer'].call(claims)
+        ::Psyche['token_issuer'].call(claims)
       end
 
   end

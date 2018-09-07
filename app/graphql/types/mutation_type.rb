@@ -1,7 +1,13 @@
 # frozen_string_literal: true
 
-Types::MutationType = GraphQL::ObjectType.define do
-  name 'Mutation'
+module Types
 
-  field :authenticate, function: Resolvers::Authenticate.new
+  class MutationType < ::GraphQL::Schema::Object
+
+    graphql_name 'Mutation'
+
+    field :authenticate, function: ::Resolvers::Authenticate.new
+
+  end
+
 end

@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
-Types::QueryType = GraphQL::ObjectType.define do
-  name 'Query'
+module Types
 
-  field :allUsers, types[Types::UserType] do
-    resolve ->(*) { User.all }
+  class QueryType < ::GraphQL::Schema::Object
+
+    graphql_name 'Query'
+
+    field :node, field: ::GraphQL::Relay::Node.field
+    field :nodes, field: ::GraphQL::Relay::Node.plural_field
+
+    field :allUsers, [UserType], null: true, resolve: ->(*) { User.all }
+
   end
+
 end

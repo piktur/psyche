@@ -44,6 +44,13 @@ module Psyche
       ::Dir['lib/tasks/**/*.rake'].each { |f| load f }
     end
 
+    routes.default_url_options = {
+      locale:   ::I18n.locale,
+      host:     ::ENV['HTTP_HOST'],
+      port:     ::ENV['PORT'],
+      protocol: ::Rails.env.production? ? 'https' : 'http'
+    }
+
     initializer 'psyche.boot', before: :run_prepare_callbacks do
       require_relative '../lib/psyche.rb'
       ::Psyche.boot!

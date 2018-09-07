@@ -1,6 +1,7 @@
 [ignore]
 
 [include]
+../app/javascript/**/*.js
 
 [libs]
 

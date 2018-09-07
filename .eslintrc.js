@@ -9,6 +9,7 @@ module.exports = {
     "browser": true, // wdio testrunner
   },
   "extends": "eslint:recommended",
+  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaFeatures": {
       "classes": true,

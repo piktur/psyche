@@ -31,5 +31,6 @@
         "spec": true
       }
     ]
-  ]
+  ],
+  "retainLines": true
 }

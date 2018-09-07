@@ -2,13 +2,18 @@
   "name": "psyche",
   "private": true,
   "scripts": {
-    "relay": "relay-compiler --src ./app/javascript --schema ./app/javascript/src/schema.graphql"
+    "relay": "relay-compiler --src ./app/javascript --schema ./app/javascript/src/schema.graphql",
+    "test": "node ./spec/runner.js ./spec/wdio.conf.js",
+    "test-debug": "DEBUG=1 npm run test",
+    "lint": "eslint --ext .js,.jsx ./app/javascript/src ./spec"
   },
   "dependencies": {
     "@material-ui/core": "^3.0.2",
     "@material-ui/icons": "^3.0.1",
     "@rails/webpacker": "3.5",
     "babel-preset-react": "^6.24.1",
+    "chalk": "^2.4.1",
+    "dotenv": "^6.0.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
@@ -20,11 +25,22 @@
     "babel-cli": "^6.26.0",
     "babel-plugin-relay": "^1.6.2",
     "babel-preset-flow": "^6.23.0",
+    "chai": "^4.1.2",
+    "chromedriver": "^2.41.0",
     "eslint": "^5.5.0",
     "eslint-plugin-react": "^7.11.1",
     "flow-bin": "^0.80.0",
+    "get-port": "^4.0.0",
     "graphql": "^14.0.0",
+    "mocha": "^5.2.0",
     "relay-compiler": "^1.6.2",
+    "selenium-server": "^3.14.0",
+    "sinon": "^6.2.0",
+    "sinon-chai": "^3.2.0",
+    "wdio-chromedriver-service": "^0.1.3",
+    "wdio-mocha-framework": "^0.6.3",
+    "wdio-spec-reporter": "^0.1.5",
+    "webdriverio": "^4.13.2",
     "webpack-dev-server": "2.11.2"
   }
 }

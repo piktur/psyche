@@ -2,7 +2,7 @@
   "name": "psyche",
   "private": true,
   "scripts": {
-    "relay": "relay-compiler --src ./app/javascript --schema ./app/javascript/packs/schema.graphql"
+    "relay": "relay-compiler --src ./app/javascript --schema ./app/javascript/src/schema.graphql"
   },
   "dependencies": {
     "@material-ui/core": "^3.0.2",

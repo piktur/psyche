@@ -26,8 +26,18 @@ module Psyche
 
     config.generators do |g|
       g.system_tests = nil
+      g.template_engine     :slim
+      g.integration_tool    :rspec
       g.test_framework      :rspec, fixture: true
-      g.fixture_replacement :factory_bot
+      g.fixture_replacement :factory_bot, dir: 'spec/factories'
+      g.request_specs       false
+      g.view_specs          false
+      g.helper_specs        false
+      g.controller_specs    false
+      g.routing_specs       false
+      g.helper              false
+      g.stylesheets         false
+      g.javascripts         false
     end
 
     rake_tasks do

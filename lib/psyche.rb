@@ -19,7 +19,7 @@ module Psyche
     attr_writer :transactions
 
     def transactions
-      @transactions = Transaction.new
+      @transactions = Transactions.new
     end
 
     # @return [void]
@@ -34,7 +34,7 @@ module Psyche
       Security.install
 
       # Finalize the container instance once everything is loaded
-      [container, transactions].finalize!
+      [container, transactions].map(&:finalize!)
     end
 
     # @return [void]
@@ -64,7 +64,7 @@ module Psyche
     # @return [void]
     def to_complete
       # Finalize the container instance(s) once everything is loaded
-      [container, transactions].finalize!
+      [container, transactions].map(&:finalize!)
     end
 
   end

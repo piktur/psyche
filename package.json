@@ -5,13 +5,16 @@
     "relay": "relay-compiler --src ./app/javascript --schema ./app/javascript/packs/schema.graphql"
   },
   "dependencies": {
+    "@material-ui/core": "^3.0.2",
+    "@material-ui/icons": "^3.0.1",
     "@rails/webpacker": "3.5",
     "babel-preset-react": "^6.24.1",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-relay": "^1.6.2",
-    "react_ujs": "^2.4.4"
+    "react_ujs": "^2.4.4",
+    "typeface-roboto": "^0.0.54"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

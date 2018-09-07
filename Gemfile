@@ -2,10 +2,7 @@
 
 source 'https://rubygems.org'
 
-git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
-  "https://github.com/#{repo_name}.git"
-end
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gem 'piktur', git: 'https://github.com/piktur/piktur.git', branch: 'master'
 
@@ -14,7 +11,7 @@ gem 'rails', '~> 5.2'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 3.11'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -30,11 +27,20 @@ gem 'react-rails'
 gem 'graphql'
 gem 'graphiql-rails', group: :development
 
+gem 'bcrypt'
+gem 'jwt', '~> 2.1'
+gem 'pundit', '~> 1.1'
+
+gem 'dry-transaction'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', '>= 1.1.0', require: false
 
 group :development, :test do
   gem 'pry-rails'
@@ -60,9 +66,3 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
-gem 'bcrypt'
-gem 'jwt', '~> 2.1'
-gem 'pundit', '~> 1.1'
-
-gem 'dry-transaction'

@@ -1,0 +1,25 @@
+input Credentials {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  authenticate(credentials: Credentials!): Token
+}
+
+type Query {
+  allUsers: [User]!
+}
+
+type Token {
+  expires_at: Int
+  expires_in: Int
+  token: String
+  type: String
+}
+
+type User {
+  email: String!
+  id: ID!
+  name: String!
+}

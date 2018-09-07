@@ -7,6 +7,7 @@ module.exports = {
   "extends": "eslint:recommended",
   "parserOptions": {
     "ecmaFeatures": {
+      "classes": true,
       "experimentalObjectRestSpread": true,
       "jsx": true
     },

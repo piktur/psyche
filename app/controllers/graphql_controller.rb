@@ -3,52 +3,50 @@
 class GraphqlController < ApplicationController
 
   def execute # rubocop:disable MethodLength
-    variables = ensure_hash(params[:variables])
-    query = params[:query]
-    operation_name = params[:operationName]
-    context = {
-      # Query context goes here, for example:
-      # current_user: current_user,
-    }
-    result = ::PsycheSchema.execute(
-      query,
-      variables:      variables,
-      context:        context,
-      operation_name: operation_name
+    render json: ::PsycheSchema.execute(
+      params[:query],
+      variables:      normalize(params[:variables]),
+      context:        {
+        current_user: current_user
+      },
+      operation_name: params[:operationName]
     )
-    render json: result
   rescue StandardError => e
-    raise e unless Rails.env.development?
-    handle_error_in_development e
+    raise(e) unless ::Rails.env.development?
+    handle_error(e)
   end
 
   private
 
     # Handle form data, JSON body, or a blank value
-    def ensure_hash(ambiguous_param) # rubocop:disable MethodLength
-      case ambiguous_param
-      when String
-        if ambiguous_param.present?
-          ensure_hash(JSON.parse(ambiguous_param))
+    #
+    # @raise [ArgumentError]
+    #
+    # @return [Hash]
+    def normalize(input) # rubocop:disable MethodLength
+      case input
+      when ::String
+        if input.present?
+          normalize(::Oj.load(input))
         else
           {}
         end
-      when Hash, ActionController::Parameters
-        ambiguous_param
+      when ::Hash, ::ActionController::Parameters
+        input
       when nil
         {}
       else
-        raise ArgumentError, "Unexpected parameter: #{ambiguous_param}"
+        raise ::ArgumentError, "Unexpected parameter: #{input}"
       end
     end
 
-    def handle_error_in_development(e)
-      logger.error e.message
-      logger.error e.backtrace.join("\n")
+    def handle_error(err)
+      logger.error(err.message)
+      logger.error(err.backtrace.join("\n"))
 
       render(
         json:   {
-          error: { message: e.message, backtrace: e.backtrace },
+          error: { message: err.message, backtrace: err.backtrace },
           data:  {}
         },
         status: :internal_server_error

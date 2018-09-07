@@ -7,6 +7,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'piktur', git: 'https://github.com/piktur/piktur.git', branch: 'master'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.6'
 # Use postgresql as the database for Active Record
@@ -30,18 +32,21 @@ gem 'graphiql-rails', group: :development
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
   gem 'pry-rails'
+  gem 'pry-rescue'
+  gem 'pry-stack_explorer'
 end
 
 group :test do
   gem 'rspec-rails'
+  gem 'piktur_spec', git: 'https://github.com/piktur/piktur_spec.git', branch: 'master'
+  gem 'timecop'
+  gem 'factory_bot_rails'
 end
 
 group :development do

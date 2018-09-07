@@ -5,6 +5,7 @@ module Psyche
   extend ::ActiveSupport::Autoload
 
   autoload :Container
+  autoload :Security
   autoload :Operations
   autoload :Transactions
 
@@ -28,11 +29,12 @@ module Psyche
       # In non-production environments cached container instance(s) will be replaced
       # {.after_class_unload}.
       self.container = Container.new
+      self.transactions = Transactions.new
 
-      ::Psyche.transactions = Transactions.new
+      Security.install
 
       # Finalize the container instance once everything is loaded
-      container.finalize!
+      [container, transactions].finalize!
     end
 
     # @return [void]
@@ -49,6 +51,9 @@ module Psyche
     def after_class_unload
       # Rebuild container instances
       self.container = Container.new
+      self.transactions = Transactions.new
+
+      Security.install
     end
 
     # @return [void]
@@ -59,7 +64,7 @@ module Psyche
     # @return [void]
     def to_complete
       # Finalize the container instance(s) once everything is loaded
-      container.finalize!
+      [container, transactions].finalize!
     end
 
   end

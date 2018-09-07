@@ -16,7 +16,7 @@ brew install watchman
 
 bundle install
 
-foreman start
+foreman start --env .env.development
 ```
 
 App: [`localhost:3000`](http://localhost:3000/)

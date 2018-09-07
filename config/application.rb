@@ -36,6 +36,31 @@ module Psyche
       ::Dir['lib/tasks/**/*.rake'].each { |f| load f }
     end
 
+    initializer 'psyche.boot', before: :run_prepare_callbacks do
+      require_relative '../lib/psyche.rb'
+      ::Psyche.boot!
+    end
+
+    reloader.to_prepare do
+      ::Psyche.to_prepare
+    end
+
+    reloader.before_class_unload do
+      ::Psyche.before_class_unload
+    end
+
+    reloader.after_class_unload do
+      ::Psyche.after_class_unload
+    end
+
+    reloader.to_run do
+      ::Psyche.to_run
+    end
+
+    reloader.to_complete do
+      ::Psyche.to_complete
+    end
+
   end
 
 end

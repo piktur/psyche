@@ -29,3 +29,5 @@ TODO.md
 .env*
 .ruby-gemset
 .ruby-version
+psyche.code-workspace
+package-lock.json

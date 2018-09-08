@@ -8,8 +8,8 @@ module Types
 
     field :token, ::String, null: false
     field :type, ::String, null: false
-    field :expires_in, ::Integer, null: false
-    field :expires_at, ::Integer, null: false
+    field :expiresIn, ::Integer, null: false
+    field :expiresAt, ::Integer, null: false
 
   end
 

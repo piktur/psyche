@@ -18,12 +18,12 @@ class PsycheSchema < GraphQL::Schema
 
     # @return [String]
     def id_from_object(object, _type_definition, _query_ctx)
-      UniqueWithinType.encode(object.class.name, object.id)
+      self::UniqueWithinType.encode(object.class.name, object.id)
     end
 
     # @return [Object]
     def object_from_id(id, _query_ctx)
-      klass, id = UniqueWithinType.decode(id)
+      klass, id = self::UniqueWithinType.decode(id)
       ::Inflector.constantize(klass).find(id)
     end
 

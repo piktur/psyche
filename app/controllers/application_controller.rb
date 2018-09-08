@@ -12,6 +12,8 @@ class ApplicationController < ActionController::Base
 
     # @return [User]
     def current_user
+      return unless request.headers.key?('Authorization')
+
       ::User.find_by(
         id: ::Psyche['token_issuer'].call(
           token: request.headers['Authorization'].split[-1]

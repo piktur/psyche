@@ -10,10 +10,13 @@ module Types
 
     global_id_field :id
 
-    field :firstName, String, required: true
-    field :lastName, String, required: true
-    field :birthday, DateTime
-    field :user, UserType
+    field :firstName, ::String, null: false
+    field :lastName, ::String, null: false
+    field :birthday, ::GraphQL::Types::ISO8601DateTime, null: false
+    field :user, UserType, null: false
+    field :address, AddressType, null: false
+    field :contact, ContactType, null: false
+    field :updatedAt, ::GraphQL::Types::ISO8601DateTime, null: false
 
   end
 

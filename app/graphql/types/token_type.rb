@@ -6,10 +6,10 @@ module Types
 
     graphql_name 'Token'
 
-    field :token, String, null: false
-    field :type, String, null: false
-    field :expires_in, Integer, null: false
-    field :expires_at, Integer, null: false
+    field :token, ::String, null: false
+    field :type, ::String, null: false
+    field :expires_in, ::Integer, null: false
+    field :expires_at, ::Integer, null: false
 
   end
 

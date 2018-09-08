@@ -6,8 +6,8 @@ module Types
 
     graphql_name 'Credentials'
 
-    argument :email, String, required: true
-    argument :password, String, required: true
+    argument :email, ::String, required: true
+    argument :password, ::String, required: true
 
   end
 

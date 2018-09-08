@@ -49,10 +49,12 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rspec-rails'
   gem 'piktur_spec', git: 'https://github.com/piktur/piktur_spec.git', branch: 'master'
-  gem 'timecop'
+  gem 'database_cleaner'
+  gem 'faker'
   gem 'factory_bot_rails'
+  gem 'rspec-rails'
+  gem 'timecop'
 end
 
 group :development do

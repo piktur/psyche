@@ -1,28 +1,21 @@
 # frozen_string_literal: true
 
-module Resolvers
+module Mutations
 
-  class Authenticate < ::GraphQL::Function
+  class Authenticate < ::GraphQL::Schema::RelayClassicMutation
 
-    argument :credentials, ::Types::CredentialsType
+    graphql_name 'Authenticate'
 
-    type ::Types::TokenType
+    argument :email, ::String, required: true
+    argument :password, ::String, required: true
 
-    def call(_opts, args, _ctx)
-      input = args[:credentials]
+    field :user, ::Types::UserType, null: true
+    field :token, ::String, null: true
+    field :errors, [::Types::ErrorType, null: true], null: true
 
-      return if input.nil?
-
-      return unless (user = ::User.find_by(email: input[:email]))
-
-      generate_token(user.to_jwt_claims) if user.authenticate(input[:password])
+    def resolve(credentials)
+      ::Psyche['authenticate'].call(credentials)
     end
-
-    private
-
-      def generate_token(claims)
-        ::Psyche['token_issuer'].call(claims)
-      end
 
   end
 

@@ -7,7 +7,7 @@ class GraphqlController < ApplicationController
       params[:query],
       variables:      normalize(params[:variables]),
       context:        {
-        current_user: current_user
+        viewer: current_user
       },
       operation_name: params[:operationName]
     )

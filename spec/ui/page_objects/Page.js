@@ -13,63 +13,68 @@ const TIMEOUTS = {
 // @see http://webdriver.io/guide/testrunner/pageobjects.html
 module.exports = class Page {
   constructor({ parent, containerSelector } = {}) {
-    this._containerSelector = containerSelector
-
     // page objects can exist in a heirarchy
     this.parent = parent
-  }
+    this._containerSelector = containerSelector
 
-  get selector() {
     if (typeof this._containerSelector === 'string') {
       if (this.parent) {
-        return `${this.parent.selector} ${this._containerSelector}`
+        this.selector = `${this.parent.selector} ${this._containerSelector}`
       }
 
-      return this._containerSelector
+      this.selector = this._containerSelector
     } else {
-      throw new Error('_containerSelector not set')
+      throw new Error('selector not set')
     }
   }
 
   get _el() {
-    return browser.element(this.selector)
+    return browser.$(this.selector)
   }
 
   get _loaderEls() {
-    throw Error
+    return browser.elements(`${this.selector} > div[class*=Loader]`)
   }
 
   get pageTitle() {
-    throw Error
+    throw Error('NOT_IMPLEMENTED')
   }
 
   get _form() {
-    throw Error
+    return this._el.$('form')
   }
 
   get _error() {
-    throw Error
+    throw Error('NOT_IMPLEMENTED')
   }
 
   get _success() {
-    throw Error
+    throw Error('NOT_IMPLEMENTED')
   }
 
   get hasErrors() {
-    throw Error
+    throw Error('NOT_IMPLEMENTED')
   }
 
   get isSuccess() {
-    throw Error
+    throw Error('NOT_IMPLEMENTED')
   }
 
   get isSubmitted() {
-    throw Error
+    throw Error('NOT_IMPLEMENTED')
+  }
+
+  get isNotValid() {
+    return browser.elements('[aria-invalid=true]').waitForVisible(this.timeout())
+  }
+
+  get isValid() {
+    return !browser.elements('[aria-invalid=true').isExisting()
   }
 
   get isExisting() {
     try {
-      return this.waitForExist({ timeout: 'animation' })
+      return this.waitForExist('animation')
     } catch (err) {
       return false
     }
@@ -77,7 +82,7 @@ module.exports = class Page {
 
   get isVisible() {
     try {
-      return this.waitForVisible({ timeout: 'animation' })
+      return this.waitForVisible('animation')
     } catch (err) {
       return false
     }
@@ -91,20 +96,16 @@ module.exports = class Page {
     return browser.desiredCapabilities.isMobile
   }
 
-  open({ pathname, authToken, query = {} }) {
-    const pageURL = new URL(process.env.TEST_BASE_URL)
+  open({ pathname = '/', query = {} }) {
+    const url = new URL(process.env.BASE_URL)
 
-    pageURL.pathname = pathname
-
-    if (authToken) {
-      query.authToken = authToken
-    }
+    url.pathname = pathname
 
     Object.keys(query).forEach(key => {
-      pageURL.searchParams.set(key, query[key])
+      url.searchParams.set(key, query[key])
     })
 
-    browser.url(pageURL.toString())
+    browser.url(url.toString())
   }
 
   timeout(key = 'network') {
@@ -136,7 +137,7 @@ module.exports = class Page {
 
     if (recursive) {
       // all loaders in this and descendant Pages
-      loaders = browser.elements(`${this.selector} .loading`)
+      loaders = browser.elements(`${this.selector} div[class*=Loader]`)
     } else {
       // only loaders referenced by this Page
       loaders = this._loaderEls
@@ -161,8 +162,8 @@ module.exports = class Page {
    * @param {String} options.key - The TIMEOUT key
    * @param {Function} onElementExist - Receives existent element; called between element transition in/out.
    */
-  waitForSnackbar(key = 'notification', onElementExist) {
-    const el = browser.element('body > .notification')
+  waitForNotification(key = 'notification', onElementExist) {
+    const el = browser.element('[class*=Snackbar]')
 
     el.waitForVisible(this.timeout(key))
 

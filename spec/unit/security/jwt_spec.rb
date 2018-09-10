@@ -353,7 +353,7 @@ module Psyche
         let(:expires_in) { 1000 }
         let(:expires_at) { token.issued_at + expires_in }
         let(:json) do
-          %{{"access_token":"#{token.to_s}","token_type":"Bearer","expires_in":#{expires_in},"expires_at":#{expires_at}}}
+          %{{"token":"#{token.to_s}","type":"Bearer","expires_in":#{expires_in},"expires_at":#{expires_at}}}
         end
 
         it { expect(json).to eq(token.to_json) }
@@ -365,7 +365,7 @@ module Psyche
         end
 
         let(:json) do
-          %{{"access_token":"#{token.to_s}","token_type":"Bearer"}}
+          %{{"token":"#{token.to_s}","type":"Bearer"}}
         end
 
         it { expect(json).to eq(token.to_json) }

@@ -6,7 +6,10 @@ module Types
 
     graphql_name 'Mutation'
 
-    field :authenticate, function: ::Resolvers::Authenticate.new
+    field :authenticate, mutation: ::Mutations::Authenticate
+    field :signUp, mutation: ::Mutations::SignUp
+    field :createProfile, mutation: ::Mutations::CreateProfile
+    field :setup, mutation: ::Mutations::Setup
 
   end
 

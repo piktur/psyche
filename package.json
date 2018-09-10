@@ -3,10 +3,11 @@
   "private": true,
   "scripts": {
     "build": "babel ./app/javascript/src/ -d ./app/javascript/lib/",
-    "relay": "relay-compiler --src ./app/javascript --schema ./app/javascript/src/schema.graphql",
+    "relay": "relay-compiler --src ./app/javascript/src --schema ./app/javascript/src/schema.graphql",
     "test": "node ./spec/runner.js ./spec/wdio.conf.js",
     "test-debug": "DEBUG=1 npm run test",
-    "lint": "eslint --ext .js,.jsx ./app/javascript/src ./spec"
+    "lint": "eslint --ext .js,.jsx ./app/javascript/src ./spec",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "@material-ui/core": "^3.0.2",
@@ -16,10 +17,12 @@
     "babel-preset-react": "^6.24.1",
     "chalk": "^2.4.1",
     "dotenv": "^6.0.0",
+    "lodash": "^4.17.10",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-relay": "^1.6.2",
+    "react-router-dom": "^4.3.1",
     "react_ujs": "^2.4.4",
     "typeface-roboto": "^0.0.54"
   },
@@ -31,8 +34,10 @@
     "babel-preset-flow": "^6.23.0",
     "chai": "^4.1.2",
     "chromedriver": "^2.41.0",
+    "cypress": "^3.1.0",
     "eslint": "^5.5.0",
     "eslint-plugin-react": "^7.11.1",
+    "faker": "^4.1.0",
     "flow-bin": "^0.80.0",
     "get-port": "^4.0.0",
     "graphql": "^14.0.0",

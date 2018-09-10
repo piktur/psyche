@@ -12,7 +12,6 @@ class PsycheSchema < GraphQL::Schema
 
   query(::Types::QueryType)
   mutation(::Types::MutationType)
-  subscription(::Types::SubscriptionType)
 
   class << self
 
@@ -30,7 +29,6 @@ class PsycheSchema < GraphQL::Schema
     # @return [Class]
     def resolve_type(_type, obj, _ctx)
       case obj
-      when Credentials then ::Types::CredentialsType
       when User then ::Types::UserType
       else raise(UnknownTypeError, obj)
       end

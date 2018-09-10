@@ -37,7 +37,7 @@ module Psyche
       end
 
       # @return [void]
-      def install # rubocop:disable MethodLength, AbcSize
+      def install
         load ::File.expand_path('./security/authorization/roles.rb', __dir__)
 
         # Alias deeply nested constants
@@ -48,14 +48,6 @@ module Psyche
 
         ::Psyche.container.register('token_issuer', memoize: true) do
           JWT::Issuer.new(issuer: ::Rails.application.default_url_options[:host])
-        end
-
-        ::Psyche.container.register('authenticate', memoize: false) do
-
-        end
-
-        ::Psyche.container.register('authorize', memoize: false) do
-
         end
       end
 

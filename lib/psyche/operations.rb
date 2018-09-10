@@ -2,8 +2,22 @@
 
 module Psyche
 
-  # @see active_model/secure_password.rb
-  module Operations
+  class Operations
+
+    include ::Dry::Container::Mixin
+
+    def self.new(*)
+      super.tap do |container|
+        container.register('authenticate', memoize: true) { ::Authenticate.new }
+        container.register('sign_up', memoize: true) { ::SignUp.new }
+        container.register('users.find', memoize: true) { ::User.method(:find) }
+      end
+    end
+
+    # @return [void]
+    def finalize!
+      freeze if ::Rails.env.production?
+    end
 
   end
 

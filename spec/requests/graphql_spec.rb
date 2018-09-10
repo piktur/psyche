@@ -7,7 +7,7 @@ RSpec.describe "POST /graphql", type: :request do
     it "responds with token" do
       query = %{
         mutation {
-          authenticate(credentials: { email: "#{admin.email}", password: "password" }) {
+          authenticate(input: { email: "#{admin.email}", password: "password" }) {
             token
           }
         }
@@ -27,13 +27,13 @@ RSpec.describe "POST /graphql", type: :request do
     end
   end
 
-  describe "allUsers" do
+  describe "users" do
     let(:token) { Psyche['token_issuer'].call(admin.to_jwt_claims).token }
 
     it "responds with a list of Users" do
       query = %{
         query {
-          allUsers {
+          users {
             id
           }
         }
@@ -46,7 +46,7 @@ RSpec.describe "POST /graphql", type: :request do
 
       post graphql_path, params: { query: query }.to_json, headers: headers
 
-      users = Oj.load(response.body).dig('data', 'allUsers')
+      users = Oj.load(response.body).dig('data', 'users')
 
       expect(response).to have_http_status(200)
       expect(users).to be_a(Array)

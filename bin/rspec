@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+APP_ROOT = Dir.pwd
+
 begin
   load File.expand_path('./env', __dir__)
   load File.expand_path('./spring', __dir__)

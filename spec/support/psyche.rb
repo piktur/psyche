@@ -3,14 +3,13 @@
 require 'psyche'
 
 RSpec.configure do |config|
-  config.before(:all) do
-    unless defined?(Rails) && Rails.application&.initialized?
-      Psyche.container = Psyche::Container.new
-      Psyche::Security.install
-    end
+  config.before(:suite) do
+    Psyche.boot! unless defined?(Rails) && Rails.application&.initialized?
   end
 
-  config.after(:all) do
+  config.after(:suite) do
     Psyche.container = nil
+    Psyche.operations = nil
+    Psyche.transactions = nil
   end
 end

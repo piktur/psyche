@@ -10,10 +10,9 @@ module Types
 
     global_id_field :id
 
-    field :name, ::String, null: false
     field :email, ::String, null: false
     field :role, ::Integer, null: false
-    field :profile, ProfileType, null: false
+    field :profile, ProfileType, null: true
     field :updatedAt, ::GraphQL::Types::ISO8601DateTime, null: false
 
   end

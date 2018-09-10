@@ -7,9 +7,17 @@ module Types
     graphql_name 'Query'
 
     field :node, field: ::GraphQL::Relay::Node.field
+
     field :nodes, field: ::GraphQL::Relay::Node.plural_field
 
-    field :allUsers, [UserType], null: true, resolve: ->(*) { User.all }
+    field :viewer, UserType, null: true, resolve: ->(_, _, ctx) { ctx[:viewer] }
+
+    field :users, [UserType], null: false, resolve: ->(*) { ::User.all }
+
+    field :user, UserType, null: false,
+          resolve: ->(_, args, _) { ::Psyche['users.find'].call(args[:id]) } do
+      argument :id, 'ID', required: true
+    end
 
   end
 

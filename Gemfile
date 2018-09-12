@@ -46,13 +46,13 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-rescue'
   gem 'pry-stack_explorer'
+  gem 'faker'
+  gem 'factory_bot_rails'
 end
 
 group :test do
   gem 'piktur_spec', git: 'https://github.com/piktur/piktur_spec.git', branch: 'master'
   gem 'database_cleaner'
-  gem 'faker'
-  gem 'factory_bot_rails'
   gem 'rspec-rails'
   gem 'timecop'
 end

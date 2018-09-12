@@ -6,6 +6,7 @@ import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/
 import { indigo, red } from '@material-ui/core/colors'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Nav from './Nav/Nav'
+import Loader from '../Loader'
 
 const theme = createMuiTheme({
   mixins: {
@@ -69,21 +70,32 @@ const styles = theme => ({
 type Props = {
   classes: Object,
   children?: React.Node,
-  viewer: Object,
+  viewer?: {
+    role: string,
+    isAuthenticated: boolean,
+  },
+  isLoading?: boolean,
 }
 
 function Layout(props: Props): MuiThemeProvider {
-  const { classes, children, viewer } = props
+  const { classes } = props
 
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <div className={classes.root}>
-        <Nav viewer={viewer} />
-        {children}
+        <Nav viewer={props.viewer || Layout.defaultProps.viewer} />
+        {props.isLoading ? <Loader /> : props.children}
       </div>
     </MuiThemeProvider>
   )
+}
+
+Layout.defaultProps = {
+  viewer: {
+    role: null,
+    isAuthenticated: false,
+  }
 }
 
 export default createFragmentContainer(withStyles(styles)(Layout), graphql`
@@ -91,6 +103,5 @@ export default createFragmentContainer(withStyles(styles)(Layout), graphql`
     role
     isAuthenticated
     ...Nav_viewer
-    ...Profile_viewer
   }
 `)

@@ -1,10 +1,11 @@
 // @flow
 
 import * as React from 'react'
+import { withRouter } from 'found'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
-import background from 'assets/images/background@1.jpg'
+// import background from 'assets/images/background@1.jpg'
 
 const styles = theme => ({
   root: {
@@ -14,18 +15,19 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     overflow: 'auto',
+    // ...theme.mixins.background(background)
   },
 })
 
 type Props = {
   classes: Object,
-  history: Object,
+  router: Object,
 }
 
 class IndexPage extends React.Component<Props> {
   handleClick = (e) => {
     e.preventDefault()
-    this.props.history.push('/sign-up')
+    this.props.router.push('/signup')
   }
 
   render() {
@@ -54,4 +56,4 @@ class IndexPage extends React.Component<Props> {
   }
 }
 
-export default withStyles(styles)(IndexPage)
+export default withRouter(withStyles(styles)(IndexPage))

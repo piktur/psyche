@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'found'
 import AppBar from '@material-ui/core/AppBar'
 import Menu from './Menu'
 import IconButton from '@material-ui/core/IconButton'
@@ -31,15 +31,18 @@ const styles: Object = theme => ({
 
 type Props = {
   classes: Object,
-  history: Object,
-  viewer: Object,
+  router: Object,
+  viewer: {
+    role?: string,
+    isAuthenticated?: boolean,
+  },
 }
 
 type State = {
   open: boolean,
 }
 
-class Nav extends React.PureComponent<Props, State> {
+class Nav extends React.Component<Props, State> {
   state = {
     open: false,
   }
@@ -49,19 +52,22 @@ class Nav extends React.PureComponent<Props, State> {
   }
 
   handleClickAuthToggle = () => {
-    if (this.props.viewer.isAuthenticated) {
+    const { viewer, router } = this.props
+
+    if (viewer && viewer.isAuthenticated) {
       LogOutMutation(() => {
         localStorage.removeItem(AUTH_ENTITY)
         localStorage.removeItem(AUTH_TOKEN)
-        this.props.history.push('/')
+        router.replace('/')
       })
     } else {
-      this.props.history.push('/login')
+      router.push('/login')
     }
   }
 
   render() {
-    const { classes, viewer: { isAuthenticated } } = this.props
+    const { classes, viewer } = this.props
+    const isAuthenticated = viewer.isAuthenticated
 
     return (
       <React.Fragment>

@@ -1,6 +1,8 @@
 // @flow
 
 import * as React from 'react'
+import { createFragmentContainer, graphql } from 'react-relay'
+import { withRouter } from 'found'
 import AuthenticateMutation from '../../mutations/AuthenticateMutation'
 import SignUpMutation from '../../mutations/SignUpMutation'
 import Avatar from '@material-ui/core/Avatar'
@@ -68,7 +70,7 @@ type Props = {
     select: string,
     submit: string,
   },
-  history: Object,
+  router: Object,
   viewer: Object,
 }
 
@@ -102,7 +104,7 @@ class SignIn extends React.Component<Props, State> {
           if (data) {
             const { viewer: { id, role, token } } = data
             this._setToken(id, token)
-            this.props.history.push(`/${ROLES[role]}`)
+            this.props.router.replace(`/${ROLES[role]}`)
           } else {
             console.error(data)
             throw Error('AUTHENTICATE_FAILED')
@@ -125,7 +127,7 @@ class SignIn extends React.Component<Props, State> {
           if (data) {
             const { viewer: { id, token } } = data
             this._setToken(id, token)
-            this.props.history.push('/profile')
+            this.props.router.push('/profile')
           } else {
             console.error(data)
             throw Error('SIGN_UP_FAILED')
@@ -278,4 +280,9 @@ class SignIn extends React.Component<Props, State> {
   }
 }
 
-export default withStyles(styles)(SignIn)
+export default createFragmentContainer(withRouter(withStyles(styles)(SignIn)), graphql`
+  fragment SignIn_viewer on Viewer {
+    role
+    isAuthenticated
+  }
+`)

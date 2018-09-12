@@ -96,7 +96,7 @@ Layout/EmptyLinesAroundModuleBody:
 
 Layout/AlignHash:
   EnforcedHashRocketStyle: key
-  EnforcedColonStyle: table
+  EnforcedColonStyle: key
   Exclude:
     - 'locales/**/*'
 

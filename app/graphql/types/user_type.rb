@@ -2,7 +2,7 @@
 
 module Types
 
-  class UserType < ::GraphQL::Schema::Object
+  class UserType < BaseObject
 
     graphql_name 'User'
 

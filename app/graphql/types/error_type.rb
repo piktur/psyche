@@ -2,7 +2,7 @@
 
 module Types
 
-  class ErrorType < ::GraphQL::Schema::Object
+  class ErrorType < BaseObject
 
     graphql_name 'Error'
 

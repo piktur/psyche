@@ -19,6 +19,8 @@ bundle install
 foreman start --env .env.development
 ```
 
-App: [`localhost:3000`](http://localhost:3000/)
-GraphQL server: [`localhost:3000/graphiql`](http://localhost:3000/graphql)
-GraphiQL server: [`localhost:3000/graphiql`](http://localhost:3000/graphiql)
+View at
+
+* App: [`localhost:3000`](http://localhost:3000/)
+* GraphQL server: [`localhost:3000/graphiql`](http://localhost:3000/graphql)
+* GraphiQL server: [`localhost:3000/graphiql`](http://localhost:3000/graphiql)

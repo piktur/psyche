@@ -11,6 +11,7 @@ module Psyche
         container.register('authenticate', memoize: true) { ::Authenticate.new }
         container.register('sign_up', memoize: true) { ::SignUp.new }
         container.register('users.find', memoize: true) { ::User.method(:find) }
+        container.register('profiles.create', memoize: true) { ::Profiles::Create.new }
       end
     end
 

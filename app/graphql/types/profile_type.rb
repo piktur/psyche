@@ -2,7 +2,7 @@
 
 module Types
 
-  class ProfileType < ::GraphQL::Schema::Object
+  class ProfileType < BaseObject
 
     graphql_name 'Profile'
 
@@ -12,7 +12,7 @@ module Types
 
     field :firstName, ::String, null: false
     field :lastName, ::String, null: false
-    field :birthday, ::GraphQL::Types::ISO8601DateTime, null: false
+    field :birthday, ::GraphQL::Types::ISO8601DateTime, null: true
     field :user, UserType, null: false
     field :address, AddressType, null: false
     field :contact, ContactType, null: false

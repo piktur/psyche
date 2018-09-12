@@ -11,11 +11,13 @@ module Mutations
     argument :birthday, ::GraphQL::Types::ISO8601DateTime, required: false
 
     field :profile, ::Types::ProfileType, null: false
-    field :user, ::Types::UserType, null: false
     field :errors, [::Types::ErrorType, null: true], null: true
 
     def resolve(input)
-      ::Psyche['profile.create'].call(user: context.viewer, **input)
+      ::Psyche['profiles.create'].call(
+        user: context[:viewer][:user],
+        **input.except(:client_mutation_id, :clientMutationId)
+      )
     end
 
   end

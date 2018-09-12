@@ -5,7 +5,6 @@ import { createFragmentContainer, graphql } from 'react-relay'
 import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormLabel from '@material-ui/core/FormLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -15,30 +14,30 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
-// import CreateProfileMutation from '../../mutations/CreateProfileMutation'
+import CreateProfileMutation from '../../mutations/CreateProfileMutation'
+import camelCase from 'lodash/camelCase'
 
 const styles = theme => ({
-  layout: {
-    width: 'auto',
+  root: {
     display: 'block', // Fix IE11 issue.
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
+    width: 'auto',
+    margin: theme.spacing.unit * 1,
     [theme.breakpoints.up('md')]: {
       width: '60vw',
-      marginLeft: 'auto',
-      marginRight: 'auto',
+      margin: `${theme.spacing.unit * 8}px auto`,
     },
   },
   paper: {
-    marginTop: theme.spacing.unit * 8,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+    padding: theme.spacing.unit * 2,
+    [theme.breakpoints.up('md')]: {
+      padding: theme.spacing.unit * 3,
+    }
   },
   form: {
     width: '100%', // Fix IE11 issue.
-    marginTop: theme.spacing.unit,
   },
   radioGroup: {
     margin: `${theme.spacing.unit}px 0`,
@@ -49,28 +48,42 @@ const styles = theme => ({
 })
 
 type Props = {
-
+  classes: Object,
+  viewer: Object,
+  history: Object,
+  environment: Object,
 }
 
 type State = {
   firstName: string,
   lastName: string,
-  birthday?: Date,
-  errors?: Object,
+  birthday?: ?Date,
+  gender?: ?string,
+  errors: {
+    firstName?: ?string,
+    lastName?: ?string,
+    birthday?: ?string,
+    gender?: ?string,
+  },
 }
 
 class Profile extends React.Component<Props, State> {
   state = {
     firstName: '',
     lastName: '',
-    errors: {
-      firstName: '',
-      lastName: '',
-    }
+    birthday: undefined,
+    gender: undefined,
+    errors: {}
+  }
+
+  handleChange = ({ target: { name, value } }) => {
+    this.setState({ [camelCase(name)]: value })
   }
 
   handleSubmit = (e) => {
-    CreateProfileMutation({ firstName, lastName, birthday }, (data) => {
+    e.preventDefault()
+    const { firstName, lastName, birthday } = this.state
+    CreateProfileMutation({ firstName, lastName, birthday }, (data, errors) => {
       if (errors) {
         const messages = {}
         errors.forEach(({ path, message }) => {
@@ -79,8 +92,9 @@ class Profile extends React.Component<Props, State> {
         })
         this.setState({ errors: messages })
       } else {
-        this._setToken(user.id, token)
-        this.props.history.push('/')
+        const { viewer: { role } } = this.props
+
+        this.props.history.push(`/${ROLES[role]}`)
       }
     })
   }
@@ -90,7 +104,7 @@ class Profile extends React.Component<Props, State> {
     const { errors } = this.state
 
     return (
-      <div className={classes.layout}>
+      <div className={classes.root}>
         <Paper className={classes.paper}>
           <Typography variant="headline">Profile</Typography>
           <Typography variant="subheading">Testing 12</Typography>
@@ -142,8 +156,8 @@ class Profile extends React.Component<Props, State> {
             </FormControl>
 
             <RadioGroup
+              name="gender"
               aria-label="Gender"
-              name="role"
               className={classes.radioGroup}
               autoComplete="sex"
               value={this.state.gender}
@@ -172,4 +186,14 @@ class Profile extends React.Component<Props, State> {
   }
 }
 
-export default withStyles(styles)(Profile)
+export default createFragmentContainer(withStyles(styles)(Profile), graphql`
+  fragment Profile_profile on Profile {
+    firstName
+    lastName
+    birthday
+  }
+
+  fragment Profile_viewer on Viewer {
+    role
+  }
+`)

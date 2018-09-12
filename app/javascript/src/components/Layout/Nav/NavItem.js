@@ -1,7 +1,7 @@
 // @flow
 
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'found'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -9,7 +9,7 @@ import { SvgIcon } from '@material-ui/core'
 
 type Props = {
   classes?: Object,
-  icon?: React.Element<typeof SvgIcon>,
+  icon?: React.Element<SvgIcon>,
   primary: string,
   secondary?: string,
   to: string,

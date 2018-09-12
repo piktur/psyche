@@ -1,6 +1,7 @@
 // @flow
 
 import * as React from 'react'
+import { createFragmentContainer, graphql } from 'react-relay'
 import Table from './Table'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
@@ -50,4 +51,9 @@ class Dashboard extends React.Component<Props> {
   }
 }
 
-export default withStyles(styles)(Dashboard)
+export default createFragmentContainer(withStyles(styles)(Dashboard), graphql`
+  fragment Dashboard_viewer on Viewer {
+    role
+    isAuthenticated
+  }
+`)

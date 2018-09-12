@@ -2,6 +2,9 @@
 
 import * as React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
+import { withRouter } from 'found'
+import camelCase from 'lodash/camelCase'
+import { ROLES } from '../../constants'
 import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -15,7 +18,6 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 import CreateProfileMutation from '../../mutations/CreateProfileMutation'
-import camelCase from 'lodash/camelCase'
 
 const styles = theme => ({
   root: {
@@ -50,7 +52,7 @@ const styles = theme => ({
 type Props = {
   classes: Object,
   viewer: Object,
-  history: Object,
+  router: Object,
   environment: Object,
 }
 
@@ -94,7 +96,7 @@ class Profile extends React.Component<Props, State> {
       } else {
         const { viewer: { role } } = this.props
 
-        this.props.history.push(`/${ROLES[role]}`)
+        this.props.router.replace(`/${ROLES[role]}`)
       }
     })
   }
@@ -186,7 +188,7 @@ class Profile extends React.Component<Props, State> {
   }
 }
 
-export default createFragmentContainer(withStyles(styles)(Profile), graphql`
+export default createFragmentContainer(withRouter(withStyles(styles)(Profile)), graphql`
   fragment Profile_profile on Profile {
     firstName
     lastName
@@ -195,5 +197,6 @@ export default createFragmentContainer(withStyles(styles)(Profile), graphql`
 
   fragment Profile_viewer on Viewer {
     role
+    isAuthenticated
   }
 `)

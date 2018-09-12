@@ -2,7 +2,7 @@
 
 module Types
 
-  class AddressType < ::GraphQL::Schema::Object
+  class AddressType < BaseObject
 
     graphql_name 'Address'
 

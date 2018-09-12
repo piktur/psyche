@@ -2,7 +2,7 @@
 
 module Types
 
-  class ContactType < ::GraphQL::Schema::Object
+  class ContactType < BaseObject
 
     graphql_name 'Contact'
 

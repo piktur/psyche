@@ -12,6 +12,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import Toolbar from '@material-ui/core/Toolbar'
 import { withStyles } from '@material-ui/core/styles'
 import { AUTH_TOKEN, AUTH_ENTITY } from '../../../constants'
+import LogOutMutation from '../../../mutations/LogOutMutation'
 
 const styles: Object = theme => ({
   root: {
@@ -48,17 +49,19 @@ class Nav extends React.PureComponent<Props, State> {
   }
 
   handleClickAuthToggle = () => {
-    if (this.props.viewer) {
-      localStorage.removeItem(AUTH_ENTITY)
-      localStorage.removeItem(AUTH_TOKEN)
-      this.props.history.push('/')
+    if (this.props.viewer.isAuthenticated) {
+      LogOutMutation(() => {
+        localStorage.removeItem(AUTH_ENTITY)
+        localStorage.removeItem(AUTH_TOKEN)
+        this.props.history.push('/')
+      })
     } else {
       this.props.history.push('/login')
     }
   }
 
   render() {
-    const { classes, viewer } = this.props
+    const { classes, viewer: { isAuthenticated } } = this.props
 
     return (
       <React.Fragment>
@@ -76,10 +79,10 @@ class Nav extends React.PureComponent<Props, State> {
 
             <IconButton
               color="inherit"
-              aria-label={viewer ? 'Sign Out': 'Sign In'}
+              aria-label={isAuthenticated ? 'Sign Out': 'Sign In'}
               onClick={this.handleClickAuthToggle}
             >
-              {viewer ? <LockOpenIcon /> : <LockIcon />}
+              {isAuthenticated ? <LockOpenIcon /> : <LockIcon />}
             </IconButton>
           </Toolbar>
         </AppBar>
@@ -94,7 +97,8 @@ class Nav extends React.PureComponent<Props, State> {
 }
 
 export default createFragmentContainer(withRouter(withStyles(styles)(Nav)), graphql`
-  fragment Nav_viewer on User {
-    email
+  fragment Nav_viewer on Viewer {
+    role
+    isAuthenticated
   }
 `)

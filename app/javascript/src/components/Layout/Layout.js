@@ -1,16 +1,40 @@
 // @flow
 
 import * as React from 'react'
-import { withStyles } from '@material-ui/core/styles'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { createFragmentContainer, graphql } from 'react-relay'
+import { MuiThemeProvider, createMuiTheme, withStyles } from '@material-ui/core/styles'
 import { indigo, red } from '@material-ui/core/colors'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Nav from './Nav/Nav'
 
 const theme = createMuiTheme({
-  appDrawer: {
-    width: 240,
-    breakpoint: 'md',
+  mixins: {
+    deductToolbarHeight() {
+      const styles = { height: `calc(100vh - ${this.toolbar.minHeight}px)` }
+      Object.keys(this.toolbar).forEach((e) => {
+        if (/^@media/.test(e)) {
+          const { [e]: { minHeight } } = this.toolbar
+          styles[e] = { height: `calc(100vh - ${minHeight}px)` }
+        }
+      })
+      return styles
+    },
+    background(img) {
+      return {
+        background: `url('${img}')`,
+        backgroundSize: 'cover',
+        '&:after': {
+          content: '\'\'',
+          position: 'relative',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+          backgroundImage: 'linear-gradient(20deg, rgb(219, 112, 147), rgb(218, 163, 87))',
+          opacity: 0.6,
+        },
+      }
+    },
   },
   palette: {
     primary: {
@@ -29,41 +53,44 @@ const theme = createMuiTheme({
       dark: red[700],
     },
   },
+  appDrawer: {
+    width: 240,
+    breakpoint: 'md',
+  },
 })
 
 const styles = theme => ({
-  content: {
+  root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
   },
 })
 
 type Props = {
   classes: Object,
   children?: React.Node,
+  viewer: Object,
 }
 
-export default function(props: Props): MuiThemeProvider {
-  let Layout = function(props: Props): React.Element<'div'> {
-    const { classes, ...other } = props
-
-    return (
-      <div className={classes.background}>
-        <Nav {...other} />
-
-        <main className={classes.content}>
-          {props.children}
-        </main>
-      </div>
-    )
-  }
-  Layout = withStyles(styles)(Layout)
+function Layout(props: Props): MuiThemeProvider {
+  const { classes, children, viewer } = props
 
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
-      <Layout {...props} />
+      <div className={classes.root}>
+        <Nav viewer={viewer} />
+        {children}
+      </div>
     </MuiThemeProvider>
   )
 }
+
+export default createFragmentContainer(withStyles(styles)(Layout), graphql`
+  fragment Layout_viewer on Viewer {
+    role
+    isAuthenticated
+    ...Nav_viewer
+    ...Profile_viewer
+  }
+`)

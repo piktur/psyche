@@ -10,27 +10,21 @@ import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import NavItem from '../Nav/NavItem'
 import PeopleIcon from '@material-ui/icons/People'
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import { withStyles } from '@material-ui/core/styles'
 
 const menuItem = [
   {
     to: '/',
     icon: <DashboardIcon />,
-    primary: 'Dashboard'
-  }, {
-    to: '/',
-    icon: <ShoppingCartIcon />,
-    primary: 'Orders'
+    primary: 'Root'
   }, {
     to: '/',
     icon: <PeopleIcon />,
-    primary: 'Customers'
+    primary: 'Users'
   },
 ]
 
 const styles = theme => ({
-  toolbar: theme.mixins.toolbar,
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',

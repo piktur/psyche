@@ -5,13 +5,30 @@ import {
   Environment,
   Network,
   RecordSource,
-  Store
+  Store,
+  ViewerHandler
 } from 'relay-runtime'
+import type { Handler } from 'react-relay'
 import { AUTH_TOKEN } from './constants'
+
+type Handlers = { [string]: ?Handler }
+
+const handlers: Handlers = {
+
+}
+
+const handlerProvider = (handle: string): Handler => {
+  // @example
+  //  viewer @__clientField(handle: "viewer")
+  if (handle === 'viewer') return ViewerHandler
+  const handler = handlers[handle]
+  if (handler != null) return handler
+  throw new Error(`handlerProvider: No handler provided for ${handle}`)
+}
 
 async function fetchQuery(operation, variables) {
   const token: ?string = localStorage.getItem(AUTH_TOKEN)
-  const headers: any = {
+  const headers: { [string]: string } = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
   }
@@ -40,4 +57,5 @@ async function fetchQuery(operation, variables) {
 export default new Environment({
   network: Network.create(fetchQuery),
   store: new Store(new RecordSource()),
+  handlerProvider,
 })

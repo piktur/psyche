@@ -30,6 +30,14 @@
       {
         "spec": true
       }
+    ],
+    [
+      "module-resolver", {
+        "root": ["./app"],
+        "alias": {
+          "assets": "./app/assets"
+        }
+      }
     ]
   ],
   "retainLines": true

@@ -11,27 +11,45 @@ class PsycheSchema < GraphQL::Schema
   end
 
   query(::Types::QueryType)
+
   mutation(::Types::MutationType)
+
+  rescue_from(::ActiveRecord::RecordInvalid) do |error|
+    error.record.errors.each_with_object([]) do |(attr, msg), obj|
+      obj << {
+        path:    ['attributes', ::Inflector.camleize(attr, false)],
+        message: Array(msg).uniq
+      }
+    end.to_json
+  end
 
   class << self
 
     # @return [String]
-    def id_from_object(object, _type_definition, _query_ctx)
-      self::UniqueWithinType.encode(object.class.name, object.id)
+    def id_from_object(object, type, ctx)
+      case type.graphql_name
+      when 'Viewer'
+        self::UniqueWithinType.encode('User', ctx[:viewer][:user]&.id)
+      else
+        self::UniqueWithinType.encode(object.class.name, object.id)
+      end
     end
 
     # @return [Object]
-    def object_from_id(id, _query_ctx)
+    def object_from_id(id, ctx)
       klass, id = self::UniqueWithinType.decode(id)
-      ::Inflector.constantize(klass).find(id)
+      case type.graphql_name
+      when 'Viewer'
+        ctx[:viewer][:user]
+      else
+        ::Inflector.constantize(klass)&.find(id)
+      end
     end
 
     # @return [Class]
     def resolve_type(_type, obj, _ctx)
-      case obj
-      when User then ::Types::UserType
-      else raise(UnknownTypeError, obj)
-      end
+      ::Inflector.constantize("#{obj}Type", ::Types, traverse: false) ||
+        raise(UnknownTypeError, obj)
     end
 
   end

@@ -2,7 +2,7 @@
 
 module Types
 
-  class QueryType < ::GraphQL::Schema::Object
+  class QueryType < BaseObject
 
     graphql_name 'Query'
 
@@ -10,7 +10,7 @@ module Types
 
     field :nodes, field: ::GraphQL::Relay::Node.plural_field
 
-    field :viewer, UserType, null: true, resolve: ->(_, _, ctx) { ctx[:viewer] }
+    field :viewer, ViewerType, null: false, resolve: ->(_, _, ctx) { ctx[:viewer] }
 
     field :users, [UserType], null: false, resolve: ->(*) { ::User.all }
 

@@ -2,7 +2,7 @@
 
 module Types
 
-  class TokenType < ::GraphQL::Schema::Object
+  class TokenType < BaseObject
 
     graphql_name 'Token'
 

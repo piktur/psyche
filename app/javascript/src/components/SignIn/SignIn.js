@@ -5,18 +5,18 @@ import AuthenticateMutation from '../../mutations/AuthenticateMutation'
 import SignUpMutation from '../../mutations/SignUpMutation'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
+import Chip from '@material-ui/core/Chip'
 import FingerprintIcon from '@material-ui/icons/Fingerprint'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
-import Grid from '@material-ui/core/Grid'
 import MenuItem from '@material-ui/core/MenuItem'
 import Paper from '@material-ui/core/Paper'
 import Select from '@material-ui/core/Select'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
-import { AUTH_TOKEN, AUTH_ENTITY } from '../../constants'
+import { AUTH_TOKEN, AUTH_ENTITY, ROLES } from '../../constants'
 
 const styles = theme => ({
   layout: {
@@ -60,22 +60,23 @@ const styles = theme => ({
 
 type Props = {
   classes: {
-    layout: number,
-    paper: string,
     avatar: string,
     form: string,
+    layout: number,
+    paper: string,
+    radioGroup: string,
+    select: string,
     submit: string,
-    radioGroup?: string,
   },
   history: Object,
+  viewer: Object,
 }
 
 type State = {
   email: string,
   password: string,
   role?: ?string,
-  isVisitor: boolean,
-  errors?: {
+  errors: {
     email?: ?string,
     password?: ?string,
     role?: ?string,
@@ -87,22 +88,28 @@ class SignIn extends React.Component<Props, State> {
     email: '',
     password: '',
     role: '',
-    isVisitor: false,
-    errors: {
-      email: undefined,
-      password: undefined,
-    }
+    errors: {}
   }
 
   _authenticate = async () => {
     const { email, password } = this.state
 
-    AuthenticateMutation(email, password, ({ user, token, errors }) => {
-      if (errors) {
-        this.handleValidationErrors(errors)
-      } else {
-        this._setToken(user.id, token)
-        this.props.history.push('/')
+    AuthenticateMutation(email, password, (data, errors) => {
+      try {
+        if (errors) {
+          this.handleValidationErrors(errors)
+        } else {
+          if (data) {
+            const { viewer: { id, role, token } } = data
+            this._setToken(id, token)
+            this.props.history.push(`/${ROLES[role]}`)
+          } else {
+            console.error(data)
+            throw Error('AUTHENTICATE_FAILED')
+          }
+        }
+      } catch(err) {
+        throw err
       }
     })
   }
@@ -110,17 +117,27 @@ class SignIn extends React.Component<Props, State> {
   _signUp = async () => {
     const { email, password } = this.state
 
-    SignUpMutation(email, password, ({ user, token, errors }) => {
-      if (errors) {
-        this.handleValidationErrors(errors)
-      } else {
-        this._setToken(user.id, token)
-        this.props.history.push('/profile')
-      }
-    })
+    try {
+      await SignUpMutation(email, password, (data, errors) => {
+        if (errors) {
+          this.handleValidationErrors(errors)
+        } else {
+          if (data) {
+            const { viewer: { id, token } } = data
+            this._setToken(id, token)
+            this.props.history.push('/profile')
+          } else {
+            console.error(data)
+            throw Error('SIGN_UP_FAILED')
+          }
+        }
+      })
+    } catch(err) {
+      throw err
+    }
   }
 
-  _setToken = (id: number, token: string) => {
+  _setToken = (id: number | string, token: string) => {
     localStorage.setItem(AUTH_ENTITY, id.toString())
     localStorage.setItem(AUTH_TOKEN, token)
   }
@@ -140,18 +157,29 @@ class SignIn extends React.Component<Props, State> {
 
   handleClickSignUp = async (event) => {
     event.preventDefault()
-    this.setState({ isVisitor: true })
-    await this._authenticate()
+    try {
+      await this._signUp()
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   handleClickLogin = async (event) => {
     event.preventDefault()
-    await this._signUp()
+    try {
+      await this._authenticate()
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  autoFill = ({ target: { textContent } }) => {
+    this.setState({ email: `${textContent}@example.com`, password: 'password' })
   }
 
   render() {
     const { classes } = this.props
-    const { errors, isVisitor } = this.state
+    const { errors } = this.state
 
     return (
       <div className={classes.layout}>
@@ -159,7 +187,20 @@ class SignIn extends React.Component<Props, State> {
           <Avatar className={classes.avatar}>
             <FingerprintIcon />
           </Avatar>
-          <Typography variant="headline">Welcome</Typography>
+          <Typography variant="headline" gutterBottom>Welcome</Typography>
+          <Typography align="center">
+            Login as&nbsp;
+            {['admin', 'customer', 'clinic', 'clinician'].map(
+              (role, i) => <Chip
+                key={i}
+                component={'span'}
+                label={role}
+                color="primary"
+                onClick={this.autoFill}
+                variant="outlined"
+              />
+            )} <strong>@example.com</strong> using <strong>password</strong>
+          </Typography>
 
           <form className={classes.form}>
             <FormControl margin="normal" required fullWidth>
@@ -212,10 +253,10 @@ class SignIn extends React.Component<Props, State> {
             <Button
               name="login"
               type="submit"
-              variant="raised"
+              variant="outlined"
               color="primary"
               className={classes.submit}
-              onClick={this.handleSubmit}
+              onClick={this.handleClickLogin}
             >
               Login
             </Button>
@@ -223,10 +264,10 @@ class SignIn extends React.Component<Props, State> {
             <Button
               name="sign-up"
               type="submit"
-              variant="raised"
+              variant="outlined"
               color="primary"
               className={classes.submit}
-              onClick={this.handleSubmit}
+              onClick={this.handleClickSignUp}
             >
               Join
             </Button>

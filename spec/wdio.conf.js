@@ -6,7 +6,8 @@ const uuid = require('uuid')
 const chalk = require('chalk')
 
 const debug = !!process.env.DEBUG
-const baseUrl = process.env.TEST_BASE_URL
+const baseUrl = process.env.BASE_URL = `http://${process.env.HTTP_HOST}:${process.env.PORT}`
+
 
 function logBrowserOutput() {
   const log = browser.log('browser')
@@ -34,7 +35,7 @@ class Device {
   constructor(opts) {
     this.browserName = 'chrome'
     // do not wait for resources to load before continuing test
-    this.pageLoadStrategy = 'none'
+    this.pageLoadStrategy = 'normal'
 
     Object.assign(this, opts)
 
@@ -88,13 +89,13 @@ exports.config = {
   ],
   exclude: [],
   sync: true,
-  logLevel: 'silent',
+  logLevel: 'verbose',
   baseUrl,
   coloredLogs: true,
   waitforTimeout: 20000,
   waitforInterval: 100,
   connectionRetryTimeout: 90000,
-  connectionRetryCount: 3,
+  connectionRetryCount: 1,
   framework: 'mocha',
   reporters: ['spec'],
   deprecationWarnings: false,
@@ -108,7 +109,7 @@ exports.config = {
   capabilities,
   services: ['chromedriver'],
   chromeDriverArgs: chromeArgs,
-  maxInstances: debug ? 1 : capabilities.length,
+  maxInstances: 1, // debug ? 1 : capabilities.length,
 
   onPrepare(config, capabilities) {
     // Assign available port to chrome instance; avoids collision if running more than one suite.

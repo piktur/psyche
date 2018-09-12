@@ -8,14 +8,16 @@ class ApplicationController < ActionController::Base
 
   private
 
+    # @return [String]
+    def _token
+      _, @_token = request.headers['Authorization']&.split(' ')
+      @_token
+    end
+
     # @return [User, nil]
     def current_user
-      _, token = request.headers['Authorization']&.split(' ')
-
-      return if token.blank?
-
-      ::User.find_by(
-        id: ::Psyche['token_issuer'].call(token: token).claims[:id]
+      _token && @_current_user = ::User.find_by(
+        id: ::Psyche['token_issuer'].call(token: _token).claims['id']
       )
     end
 

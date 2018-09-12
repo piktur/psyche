@@ -2,18 +2,25 @@
 
 class GraphqlController < ApplicationController
 
-  def execute # rubocop:disable MethodLength
+  def execute # rubocop:disable AbcSize, MethodLength
     render json: ::PsycheSchema.execute(
       params[:query],
-      variables:      normalize(params[:variables]),
-      context:        {
-        viewer: current_user
+      variables: normalize(params[:variables]),
+      context: {
+        viewer: {
+          id: current_user&.id,
+          user: current_user,
+          role: current_user&.role,
+          token: _token,
+          is_authenticated: !!current_user
+        }
       },
       operation_name: params[:operationName]
     )
-  rescue StandardError => e
-    raise(e) unless ::Rails.env.development?
-    handle_error(e)
+  rescue StandardError, ::GraphQL::RuntimeTypeError => err
+    puts err.backtrace
+    raise(err) unless ::Rails.env.development?
+    handle_error(err)
   end
 
   private
@@ -29,12 +36,12 @@ class GraphqlController < ApplicationController
         if input.present?
           normalize(::Oj.load(input))
         else
-          {}
+          ::Psyche::EMPTY_HASH
         end
       when ::Hash, ::ActionController::Parameters
         input
       when nil
-        {}
+        ::Psyche::EMPTY_HASH
       else
         raise ::ArgumentError, "Unexpected parameter: #{input}"
       end
@@ -45,9 +52,9 @@ class GraphqlController < ApplicationController
       logger.error(err.backtrace.join("\n"))
 
       render(
-        json:   {
-          error: { message: err.message, backtrace: err.backtrace },
-          data:  {}
+        json: {
+          errors: [{ message: err.message, backtrace: err.backtrace }],
+          data: {}
         },
         status: :internal_server_error
       )

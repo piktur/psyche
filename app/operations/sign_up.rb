@@ -6,7 +6,15 @@ class SignUp
     user = ::User.new(email: input[:email], password: input[:password])
     user.save!
 
-    { user: user, token: token(user.to_jwt_claims), errors: nil }
+    {
+      viewer: {
+        token: token(user.to_jwt_claims),
+        role: user.role,
+        user: user,
+        is_authenticated: true
+      },
+      user: user
+    }
   rescue ::StandardError => err
     case err
     when ::ActiveRecord::RecordInvalid
@@ -19,7 +27,7 @@ class SignUp
       raise ::GraphQL::ExecutionError, err.message
     end
 
-    { user: user, errors: errors }
+    { viewer: ::Types::ViewerType::NULL, user: user, errors: errors }
   end
 
   private

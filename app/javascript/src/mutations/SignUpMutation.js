@@ -6,7 +6,12 @@ import environment from '../Environment'
 const mutation = graphql`
   mutation SignUpMutation($input: SignUpInput!) {
     signUp(input: $input) {
-      token
+      viewer @__clientField(handle: "viewer") {
+        id
+        role
+        token
+        isAuthenticated
+      }
       user {
         id
         email
@@ -23,7 +28,7 @@ const mutation = graphql`
   }
 `
 
-export default (email: string, password: string, cb: Function) => {
+export default (email: string, password: string, onCompleted: Function) => {
   const variables = {
     input: {
       email,
@@ -37,7 +42,14 @@ export default (email: string, password: string, cb: Function) => {
     {
       mutation,
       variables,
-      onCompleted: (data) => { cb(data.signUp) },
+      onCompleted: (data) => {
+        if (data) {
+          const { signUp } = data
+          onCompleted(signUp, signUp.errors)
+        } else {
+          throw Error('UNEXPECTED_RESPONSE')
+        }
+      },
       onError: (err) => { console.error(err) },
     },
   )

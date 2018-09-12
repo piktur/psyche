@@ -6,14 +6,11 @@ import environment from '../Environment'
 const mutation = graphql`
   mutation AuthenticateMutation($input: AuthenticateInput!) {
     authenticate(input: $input) {
-      token
-      user {
+      viewer @__clientField(handle: "viewer") {
         id
-        email
-        profile {
-          firstName
-          lastName
-        }
+        role
+        token
+        isAuthenticated
       }
       errors {
         message
@@ -37,7 +34,14 @@ export default (email: string, password: string, cb: Function) => {
     {
       mutation,
       variables,
-      onCompleted: (data) => { cb(data.authenticate) },
+      onCompleted: (data) => {
+        if (data) {
+          const { authenticate } = data
+          cb(authenticate, authenticate.errors)
+        } else {
+          throw Error('UNEXPECTED_RESPONSE')
+        }
+      },
       onError: (err) => { console.error(err) }
     }
   )

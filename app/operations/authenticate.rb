@@ -6,10 +6,23 @@ class Authenticate
     user = ::User.find_by(email: input[:email])
 
     if user&.authenticate(input[:password])
-      { user: user, token: token(user.to_jwt_claims) }
+      {
+        viewer: {
+          token: token(user.to_jwt_claims),
+          role: user.role,
+          user: user,
+          is_authenticated: true
+        },
+        user: user
+      }
     else
-      { errors: [{ path: %w(attributes password), message: 'Invalid password' }] }
+      {
+        viewer: ::Types::ViewerType::NULL,
+        errors: [{ path: %w(attributes password), message: 'Invalid password' }]
+      }
     end
+  rescue ::JWT::Error => err
+    raise ::GraphQL::ExecutionError, err.message
   end
 
   private

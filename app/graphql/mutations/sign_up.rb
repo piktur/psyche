@@ -9,8 +9,8 @@ module Mutations
     argument :email, ::String, required: true
     argument :password, ::String, required: true
 
-    field :user, ::Types::UserType, null: true
-    field :token, ::String, null: true
+    field :viewer, ::Types::ViewerType, null: false
+    field :user, ::Types::UserType, null: false
     field :errors, [::Types::ErrorType, null: true], null: true
 
     def resolve(credentials)

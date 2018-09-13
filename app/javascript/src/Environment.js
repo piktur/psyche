@@ -10,12 +10,11 @@ import {
 } from 'relay-runtime'
 import type { Handler } from 'react-relay'
 import { AUTH_TOKEN } from './constants'
+import { installRelayDevTools } from 'relay-devtools'
 
 type Handlers = { [string]: ?Handler }
 
-const handlers: Handlers = {
-
-}
+const handlers: Handlers = { }
 
 const handlerProvider = (handle: string): Handler => {
   // @example
@@ -52,6 +51,10 @@ async function fetchQuery(operation, variables) {
   } catch (err) {
     throw err
   }
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  installRelayDevTools()
 }
 
 export default new Environment({

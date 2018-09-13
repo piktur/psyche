@@ -35,15 +35,11 @@ class Dashboard extends React.Component<Props> {
     return (
       <div className={classes.root}>
         <main className={classes.content}>
-          <Typography component="div" className={classes.chartContainer}>
-          </Typography>
-
-          <Typography variant="display1" gutterBottom>
-            Products
+          <Typography component="div" className={classes.chartContainer} gutterBottom>
+            Admin
           </Typography>
 
           <div className={classes.tableContainer}>
-            <Table />
           </div>
         </main>
       </div>

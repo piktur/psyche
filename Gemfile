@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
+ruby ENV.fetch('RUBY_VERSION').sub('ruby-', '')
 
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 

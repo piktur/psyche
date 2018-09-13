@@ -7,6 +7,7 @@ module.exports = {
   },
   "globals": {
     "browser": true, // wdio testrunner
+    "cy": true,
   },
   "extends": "eslint:recommended",
   "parser": "babel-eslint",

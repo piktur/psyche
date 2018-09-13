@@ -18,7 +18,7 @@ class UnauthorizedError extends HTTPError {
 }
 
 type Props = {
-  router: routerShape,
+  route: routerShape,
   viewer: {
     role: Role,
     isAuthenticated: boolean,
@@ -26,10 +26,9 @@ type Props = {
 }
 
 export default class ProtectedRoute extends Route {
-  render({ Component, props }: { Component: ?React.ComponentType<any>, props: ?Props }) {
+  render({ Component, props }: { Component: ?React.Component<any>, props: ?Props }) {
     if (!Component || !props) return <Loader />
 
-    console.log(viewer)
     const { viewer, route } = props
     if (viewer && ROLES[viewer.role] !== route.path) {
       throw new UnauthorizedError()

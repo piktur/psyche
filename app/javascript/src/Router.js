@@ -2,13 +2,11 @@
 
 import * as React from 'react'
 import { BrowserProtocol, queryMiddleware } from 'farce'
-import {
-  createFarceRouter,
-  createRender,
-  makeRouteConfig,
-  Route,
-  matchShape
-} from 'found'
+import makeRouteConfig from 'found/lib/makeRouteConfig'
+import Route from 'found/lib/Route'
+import { matchShape } from 'found/lib/PropTypes'
+import createFarceRouter from 'found/lib/createFarceRouter'
+import createRender from 'found/lib/createRender'
 import { Resolver } from 'found-relay'
 import { graphql } from 'react-relay'
 import environment from './Environment'

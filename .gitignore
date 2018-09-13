@@ -13,6 +13,8 @@
 !/log/.keep
 !/tmp/.keep
 
+/app/assets/images
+
 /node_modules
 /yarn-error.log
 

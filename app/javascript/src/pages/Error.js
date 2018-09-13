@@ -2,8 +2,14 @@
 
 import * as React from 'react'
 import Typography from '@material-ui/core/Typography'
+import { withStyles } from '@material-ui/core/styles'
+
+const styles = theme => ({
+  // ...theme.page(),
+})
 
 type Props = {
+  classes: Object,
   error: {
     status?: number | string,
     message?: string
@@ -18,13 +24,15 @@ const Message = (props: Props) => {
   </Typography>
 }
 
-export default (props: Props): React.Element<'main'> => {
-  const { error } = props
+export default withStyles(styles)((props: Props): React.Element<'div'> => {
+  const { error, classes } = props
 
-  return <main>
-    <Typography variant="display4" gutterBottom>
-      {error && error.status ? `Error [${error.status}]` : 'Error'}
-    </Typography>
-    {error && <Message {...props} />}
-  </main>
-}
+  return <div className={classes.root}>
+    <main className={classes.content}>
+      <Typography variant="display4" gutterBottom>
+        {error && error.status ? `Error [${error.status}]` : 'Error'}
+      </Typography>
+      {error && <Message {...props} />}
+    </main>
+  </div>
+})

@@ -9,15 +9,8 @@ import Button from '@material-ui/core/Button'
 import type { routerShape } from 'found/lib/PropTypes'
 
 const styles = theme => ({
-  root: {
-    display: 'flex',
-    padding: theme.spacing.unit * 3,
-  },
-  content: {
-    flexGrow: 1,
-    overflow: 'auto',
-    // ...theme.mixins.background(background)
-  },
+  ...theme.page(),
+  // ...theme.mixins.background(background)
 })
 
 type Props = {

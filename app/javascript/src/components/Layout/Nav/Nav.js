@@ -13,6 +13,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import { withStyles } from '@material-ui/core/styles'
 import { AUTH_TOKEN, AUTH_ENTITY } from '../../../constants'
 import LogOutMutation from '../../../mutations/LogOutMutation'
+import type { routerShape } from 'found/lib/PropTypes'
 
 const styles: Object = theme => ({
   root: {
@@ -31,7 +32,7 @@ const styles: Object = theme => ({
 
 type Props = {
   classes: Object,
-  router: Object,
+  router: routerShape,
   viewer: {
     role?: string,
     isAuthenticated?: boolean,

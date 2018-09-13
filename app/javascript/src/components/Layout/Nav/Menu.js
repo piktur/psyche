@@ -9,18 +9,13 @@ import Drawer from '@material-ui/core/Drawer'
 import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import NavItem from '../Nav/NavItem'
-import PeopleIcon from '@material-ui/icons/People'
 import { withStyles } from '@material-ui/core/styles'
 
-const menuItem = [
+const menuItems = [
   {
     to: '/',
     icon: <DashboardIcon />,
-    primary: 'Root'
-  }, {
-    to: '/',
-    icon: <PeopleIcon />,
-    primary: 'Users'
+    primary: 'Home'
   },
 ]
 
@@ -29,7 +24,7 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    padding: '0 8px',
+    padding: `0 ${theme.spacing.unit}px`,
     ...theme.mixins.toolbar,
   },
   drawerPaper: {
@@ -58,18 +53,6 @@ class Menu extends React.Component<Props> {
   render() {
     const { classes, theme } = this.props
 
-    const menuItems = (
-      <div>
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={this.props.onClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>{menuItem.map((props, i) => <NavItem key={i} {...props} />)}</List>
-      </div>
-    )
-
     return (
       <Drawer
         variant="temporary"
@@ -82,7 +65,19 @@ class Menu extends React.Component<Props> {
           keepMounted: true, // Improve mobile performance
         }}
       >
-        {menuItems}
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={this.props.onClose}>
+            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        </div>
+
+        <Divider />
+
+        <List>
+          {menuItems.map(
+            (ownProps, i) => <NavItem key={i} onClick={this.props.onClose} {...ownProps} />
+          )}
+        </List>
       </Drawer>
     )
   }

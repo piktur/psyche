@@ -70,7 +70,7 @@ const styles = theme => ({
 type Props = {
   classes: Object,
   children?: React.Node,
-  viewer?: {
+  viewer: {
     role: string,
     isAuthenticated: boolean,
   },

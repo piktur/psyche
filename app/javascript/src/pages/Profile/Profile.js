@@ -3,12 +3,13 @@
 import * as React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
 import { withRouter } from 'found'
-import camelCase from 'lodash/camelCase'
 import { ROLES } from '../../constants'
+import Address from './Address/Address'
 import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
+import FormLabel from '@material-ui/core/FormLabel'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import Paper from '@material-ui/core/Paper'
@@ -18,6 +19,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 import CreateProfileMutation from '../../mutations/CreateProfileMutation'
+import type { routerShape } from 'found/lib/PropTypes'
 
 const styles = theme => ({
   root: {
@@ -52,7 +54,7 @@ const styles = theme => ({
 type Props = {
   classes: Object,
   viewer: Object,
-  router: Object,
+  router: routerShape,
   environment: Object,
 }
 
@@ -73,18 +75,20 @@ class Profile extends React.Component<Props, State> {
   state = {
     firstName: '',
     lastName: '',
-    birthday: undefined,
-    gender: undefined,
+    birthday: null,
+    gender: null,
     errors: {}
   }
 
-  handleChange = ({ target: { name, value } }) => {
-    this.setState({ [camelCase(name)]: value })
+  handleChange = ({ target: { name, value } }: { target: { name: string, value: string } }) => {
+    this.setState({ [name]: value })
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
+
     const { firstName, lastName, birthday } = this.state
+
     CreateProfileMutation({ firstName, lastName, birthday }, (data, errors) => {
       if (errors) {
         const messages = {}
@@ -115,12 +119,10 @@ class Profile extends React.Component<Props, State> {
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="first-name">First Name</InputLabel>
               <Input
-                id="first-name"
-                name="first-name"
-                type="first-name"
-                error={!!errors.firstName}
                 autoComplete="given-name"
                 autoFocus
+                error={!!errors.firstName}
+                name="firstName"
                 onChange={this.handleChange}
                 value={this.state.firstName}
               />
@@ -130,12 +132,10 @@ class Profile extends React.Component<Props, State> {
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="lastName">Last Name</InputLabel>
               <Input
-                id="last-name"
-                name="last-name"
-                type="last-name"
-                error={!!errors.lastName}
                 autoComplete="family-name"
                 autoFocus
+                error={!!errors.lastName}
+                name="lastName"
                 onChange={this.handleChange}
                 value={this.state.lastName}
               />
@@ -144,40 +144,45 @@ class Profile extends React.Component<Props, State> {
 
             <FormControl margin="normal" fullWidth>
               <TextField
-                id="birtday"
-                name="birthday"
-                label="Birthday"
-                type="date"
                 autoComplete="bday"
                 className={classes.textField}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label="Birthday"
+                name="birthday"
+                type="date"
               />
               {errors.birthday && <FormHelperText>{errors.birthday}</FormHelperText>}
             </FormControl>
 
-            <RadioGroup
-              name="gender"
-              aria-label="Gender"
-              className={classes.radioGroup}
-              autoComplete="sex"
-              value={this.state.gender}
-              onChange={this.handleChange}
-            >
-              <FormControlLabel value="male" control={<Radio />} checked label="Male" />
-              <FormControlLabel value="female" control={<Radio />} label="Female" />
-              <FormControlLabel value="other" control={<Radio />} label="Other" />
-            </RadioGroup>
-            {errors.gender && <FormHelperText>{errors.gender}</FormHelperText>}
+            <FormControl margin="normal" fullWidth>
+              <FormLabel component="legend">Gender</FormLabel>
+              <RadioGroup
+                aria-label="Gender"
+                autoComplete="sex"
+                className={classes.radioGroup}
+                name="gender"
+                onChange={this.handleChange}
+                row
+                value={this.state.gender}
+              >
+                <FormControlLabel value="male" control={<Radio />} checked label="Male" />
+                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                <FormControlLabel value="other" control={<Radio />} label="Other" />
+              </RadioGroup>
+              {errors.gender && <FormHelperText>{errors.gender}</FormHelperText>}
+            </FormControl>
+
+            <Address />
 
             <Button
-              type="submit"
-              fullWidth
-              variant="raised"
-              color="primary"
               className={classes.submit}
+              color="primary"
+              fullWidth
               onClick={this.handleSubmit}
+              type="submit"
+              variant="raised"
             >
               Submit
             </Button>

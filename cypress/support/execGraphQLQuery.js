@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-async function setup() {
+module.exports = async function setup() {
   try {
     const { data } = await axios({
       url: 'http://localhost:3000/graphql',
@@ -20,11 +20,13 @@ async function setup() {
         }`,
         variables: {
           input: {
-            validFor: 100000
+            validFor: 100000,
           }
         },
       }
     })
+
+    return data
   } catch (err) {
     throw err
   }

@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 // import background from 'assets/images/background@1.jpg'
+import type { routerShape } from 'found/lib/PropTypes'
 
 const styles = theme => ({
   root: {
@@ -21,7 +22,7 @@ const styles = theme => ({
 
 type Props = {
   classes: Object,
-  router: Object,
+  router: routerShape,
 }
 
 class IndexPage extends React.Component<Props> {

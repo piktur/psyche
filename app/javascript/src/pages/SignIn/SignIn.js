@@ -2,7 +2,8 @@
 
 import * as React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
-import { withRouter } from 'found'
+import withRouter from 'found/lib/withRouter'
+import type { routerShape } from 'found/lib/PropTypes'
 import AuthenticateMutation from '../../mutations/AuthenticateMutation'
 import SignUpMutation from '../../mutations/SignUpMutation'
 import Avatar from '@material-ui/core/Avatar'
@@ -70,7 +71,7 @@ type Props = {
     select: string,
     submit: string,
   },
-  router: Object,
+  router: routerShape,
   viewer: Object,
 }
 

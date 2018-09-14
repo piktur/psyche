@@ -2,7 +2,7 @@
 
 module Mutations
 
-  class CreateProfile < ::GraphQL::Schema::RelayClassicMutation
+  class CreateProfile < BaseMutation
 
     graphql_name 'CreateProfile'
 
@@ -11,7 +11,6 @@ module Mutations
     argument :birthday, ::GraphQL::Types::ISO8601DateTime, required: false
 
     field :profile, ::Types::ProfileType, null: false
-    field :errors, [::Types::ErrorType, null: true], null: true
 
     def resolve(input)
       ::Psyche['profiles.create'].call(

@@ -2,7 +2,7 @@
 
 module Mutations
 
-  class Setup < ::GraphQL::Schema::RelayClassicMutation
+  class Setup < BaseMutation
 
     ROLES = ::Psyche['enum.authorization.roles'].keys
     private_constant :ROLES

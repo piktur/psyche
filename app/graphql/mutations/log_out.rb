@@ -2,15 +2,14 @@
 
 module Mutations
 
-  class LogOut < ::GraphQL::Schema::RelayClassicMutation
+  class LogOut < BaseMutation
 
     graphql_name 'LogOut'
 
     field :viewer, ::Types::ViewerType, null: false
-    field :errors, [::Types::ErrorType, null: true], null: true
 
     def resolve(*)
-      { viewer: ::Types::ViewerType::NULL }
+      { viewer: ::Viewer.new }
     end
 
   end

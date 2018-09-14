@@ -14,10 +14,10 @@ class PsycheSchema < GraphQL::Schema
 
   mutation(::Types::MutationType)
 
-  rescue_from(::ActiveRecord::RecordInvalid) do |error|
-    error.record.errors.each_with_object([]) do |(attr, msg), obj|
+  rescue_from(::ActiveRecord::RecordInvalid) do |err|
+    err.record.errors.each_with_object([]) do |(attr, msg), obj|
       obj << {
-        path:    ['attributes', ::Inflector.camleize(attr, false)],
+        path:    ['attributes', ::Inflector.camelize(attr, false)],
         message: Array(msg).uniq
       }
     end.to_json

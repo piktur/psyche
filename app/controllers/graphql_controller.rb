@@ -17,8 +17,7 @@ class GraphqlController < ApplicationController
       },
       operation_name: params[:operationName]
     )
-  rescue StandardError, ::GraphQL::RuntimeTypeError => err
-    puts err.backtrace
+  rescue ::StandardError, ::GraphQL::RuntimeTypeError => err
     raise(err) unless ::Rails.env.development?
     handle_error(err)
   end

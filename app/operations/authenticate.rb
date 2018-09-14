@@ -1,34 +1,26 @@
 # frozen_string_literal: true
 
+AuthenticationError = ::Class.new(::StandardError)
+
 class Authenticate
 
-  def call(input)
-    user = ::User.find_by(email: input[:email])
+  include ::Dry::Transaction
 
-    if user&.authenticate(input[:password])
-      {
-        viewer: {
-          token: token(user.to_jwt_claims),
-          role: user.role,
-          user: user,
-          is_authenticated: true
-        },
-        user: user
-      }
-    else
-      {
-        viewer: ::Types::ViewerType::NULL,
-        errors: [{ path: %w(attributes password), message: 'Invalid password' }]
-      }
-    end
-  rescue ::JWT::Error => err
-    raise ::GraphQL::ExecutionError, err.message
-  end
+  try :find, catch: ::ActiveRecord::RecordNotFound
+  try :authenticate, catch: [::AuthenticationError, ::JWT::EncodeError]
 
   private
 
-    def token(claims)
-      ::Psyche['token_issuer'].call(claims).token
+    def find(email:, password:, **)
+      user = ::User.find_by!(email: email)
+      [user, password]
+    end
+
+    def authenticate(input)
+      user, password = input
+      return [user, ::Psyche['token_issuer'].call(user.to_jwt_claims)] if
+        user.authenticate(password)
+      raise ::AuthenticationError
     end
 
 end

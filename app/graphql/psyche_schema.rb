@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-class PsycheSchema < GraphQL::Schema
+class UnknownTypeError < ::StandardError
 
-  class UnknownTypeError < ::StandardError
-
-    def initialize(obj)
-      super(obj.inspect)
-    end
-
+  def initialize(obj)
+    super(obj.inspect)
   end
+
+end
+
+class PsycheSchema < GraphQL::Schema
 
   query(::Types::QueryType)
 
@@ -26,19 +26,14 @@ class PsycheSchema < GraphQL::Schema
   class << self
 
     # @return [String]
-    def id_from_object(object, type, ctx)
-      case type.graphql_name
-      when 'Viewer'
-        self::UniqueWithinType.encode('User', ctx[:viewer][:user]&.id)
-      else
-        self::UniqueWithinType.encode(object.class.name, object.id)
-      end
+    def id_from_object(object, *)
+      self::UniqueWithinType.encode(object.class.name, object.id)
     end
 
     # @return [Object]
     def object_from_id(id, ctx)
       klass, id = self::UniqueWithinType.decode(id)
-      case type.graphql_name
+      case klass
       when 'Viewer'
         ctx[:viewer][:user]
       else
@@ -47,9 +42,10 @@ class PsycheSchema < GraphQL::Schema
     end
 
     # @return [Class]
-    def resolve_type(_type, obj, _ctx)
-      ::Inflector.constantize("#{obj}Type", ::Types, traverse: false) ||
-        raise(UnknownTypeError, obj)
+    def resolve_type(type, obj, _ctx)
+      const = "#{type.graphql_name == 'Node' ? obj.class : type.graphql_name}Type"
+      ::Inflector.constantize(const, ::Types, traverse: false) ||
+        raise(::UnknownTypeError, obj)
     end
 
   end

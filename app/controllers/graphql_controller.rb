@@ -7,13 +7,7 @@ class GraphqlController < ApplicationController
       params[:query],
       variables: normalize(params[:variables]),
       context: {
-        viewer: {
-          id: current_user&.id,
-          user: current_user,
-          role: current_user&.role,
-          token: _token,
-          is_authenticated: !!current_user
-        }
+        viewer: ::Viewer.new(current_user, _token).as_json
       },
       operation_name: params[:operationName]
     )

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Viewer = ::Struct.new(:user, :token) do
+  def id; user&.id; end
+
   def role; user&.role; end
 
   def authenticated?; user.present?; end
@@ -8,6 +10,7 @@ Viewer = ::Struct.new(:user, :token) do
 
   def as_json
     {
+      id: id,
       user: user,
       token: token,
       role: role,

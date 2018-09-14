@@ -4,13 +4,6 @@ module Types
 
   class ViewerType < BaseObject
 
-    NULL = {
-      token: nil,
-      role: nil,
-      user: nil,
-      is_authenticated: false
-    }
-
     graphql_name 'Viewer'
 
     implements ::GraphQL::Relay::Node.interface

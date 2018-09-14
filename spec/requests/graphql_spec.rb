@@ -8,7 +8,9 @@ RSpec.describe "POST /graphql", type: :request do
       query = %{
         mutation {
           authenticate(input: { email: "#{admin.email}", password: "password" }) {
-            token
+            viewer {
+              token
+            }
           }
         }
       }.squish!
@@ -19,7 +21,7 @@ RSpec.describe "POST /graphql", type: :request do
 
       post graphql_path, params: { query: query }.to_json, headers: headers
 
-      token = Oj.load(response.body).dig('data', 'authenticate', 'token')
+      token = Oj.load(response.body).dig('data', 'authenticate', 'viewer', 'token')
       user = User.find_by(id: Psyche['token_issuer'].call(token: token).claims['id'])
 
       expect(response).to have_http_status(200)

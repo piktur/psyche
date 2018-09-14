@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { createFragmentContainer, graphql } from 'react-relay'
-import Table from './Table'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
@@ -15,12 +14,6 @@ const styles = (theme) => ({
   content: {
     flexGrow: 1,
     overflow: 'auto',
-  },
-  chartContainer: {
-    marginLeft: -22,
-  },
-  tableContainer: {
-    height: 320,
   },
 })
 
@@ -35,7 +28,7 @@ class Dashboard extends React.Component<Props> {
     return (
       <div className={classes.root}>
         <main className={classes.content}>
-          <Typography component="div" className={classes.chartContainer} gutterBottom>
+          <Typography variant="display2" gutterBottom>
             Admin
           </Typography>
 

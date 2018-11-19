@@ -10,6 +10,5 @@ RSpec.configure do |config|
   config.after(:suite) do
     Psyche.container = nil
     Psyche.operations = nil
-    Psyche.transactions = nil
   end
 end
